@@ -1,6 +1,14 @@
 import './Footer.css';
 import { Link } from 'react-router-dom';
 import React, { useState } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase'; // adjust path as needed
+
+function handleSignOut(navigate) {
+  signOut(auth).then(() => {
+    navigate('/'); // or '/login'
+  });
+}
 
 function Footer() {
     const [showContact, setShowContact] = useState(false);

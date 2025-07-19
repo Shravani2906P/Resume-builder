@@ -69,6 +69,42 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
+.signout-btn {
+  background: none;
+  border: 1.5px solid #a5b4fc;
+  color: #F3F4F6;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-left: 12px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.signout-btn:hover {
+  background: #a5b4fc;
+  color: #22223b;
+}
+.profile-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #F3F4F6;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.05rem;
+  margin-left: 12px;
+  display: flex;
+  align-items: center;
+}
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 6px;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
