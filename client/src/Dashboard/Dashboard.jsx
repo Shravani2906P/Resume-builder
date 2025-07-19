@@ -11,6 +11,11 @@ function Dashboard() {
   const [savedResumes, setSavedResumes] = useState([]);
   const [viewResume, setViewResume] = useState(null);
   const previewRef = useRef();
+  const [shareUrl, setShareUrl] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareLoading, setShareLoading] = useState(false);
+  const [shareResume, setShareResume] = useState(null);
+  const sharePreviewRef = useRef();
 
   useEffect(() => {
     const resumes = JSON.parse(localStorage.getItem('resumes') || '[]');
@@ -54,6 +59,40 @@ function Dashboard() {
     }
   };
 
+  // Get Shareable Link for saved resume
+  const handleShare = async (resume) => {
+    setShareResume(resume);
+    setShareLoading(true);
+    setShowShareModal(true);
+    setShareUrl('');
+    setTimeout(async () => {
+      if (sharePreviewRef.current) {
+        const canvas = await html2canvas(sharePreviewRef.current, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pageWidth;
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight > pageHeight ? pageHeight : pdfHeight);
+        const pdfBlob = pdf.output('blob');
+        // Use transfer.sh with CORS proxy
+        const response = await fetch('https://corsproxy.io/?https://transfer.sh/resume.pdf', {
+          method: 'POST',
+          body: pdfBlob,
+          headers: {
+            'Content-Type': 'application/pdf'
+          }
+        });
+        const link = await response.text();
+        console.log('transfer.sh response:', link);
+        setShareUrl(link.startsWith('http') ? link : 'Failed to upload PDF: ' + link);
+        setShareLoading(false);
+      }
+    }, 200);
+  };
+
   return (
     <div className="dashboard-container" style={{ paddingTop: '80px', minHeight: '100vh' }}>
       <header className="dashboard-header">
@@ -84,6 +123,7 @@ function Dashboard() {
             <div className="actions">
               <button onClick={() => openResumeModal(resume)}>View</button>
               <button onClick={() => openResumeModal(resume)}>Download</button>
+              <button onClick={() => handleShare(resume)}>Get Shareable Link</button>
               <Link to={`/builder?id=${resume.id}`}><button>Edit</button></Link>
               <button className="delete-btn" onClick={() => handleDelete(resume.id)}>Delete</button>
             </div>
@@ -195,6 +235,138 @@ function Dashboard() {
               ))}
             </div>
             <button className="download-pdf-btn" onClick={downloadPDF} style={{marginTop: '18px'}}>Download PDF</button>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden preview for sharing */}
+      {shareResume && (
+        <div style={{position:'fixed',left:'-9999px',top:'-9999px',opacity:0,pointerEvents:'none'}}>
+          <div ref={sharePreviewRef} className="resume-preview-box" style={{margin:0}}>
+            <div className="resume-header">
+              <h1>{shareResume.details?.name || 'Your Name'}</h1>
+              <div className="resume-contact">
+                {shareResume.details?.email && <span style={{color: '#222'}}>&#9993; {shareResume.details.email}</span>}
+                {shareResume.details?.phone && <span style={{color: '#222'}}>&#128222; {shareResume.details.phone}</span>}
+                {shareResume.details?.location && <span style={{color: '#222'}}>&#128205; {shareResume.details.location}</span>}
+              </div>
+              {shareResume.socials?.length > 0 && (
+                <div className="resume-socials">
+                  {shareResume.socials.map((soc, i) => (
+                    <span key={i}>
+                      {soc.github && <span style={{marginRight: '12px'}}>
+                        <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" style={{verticalAlign: 'middle'}}><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.11.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                        <a href={soc.github} target="_blank" rel="noopener noreferrer">GitHub</a></span>}
+                      {soc.linkedin && <span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{verticalAlign: 'middle'}}><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.968v5.699h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.036 0 3.6 2.001 3.6 4.599v5.597z"/></svg>
+                        <a href={soc.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a></span>}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+            {shareResume.education?.length > 0 && (
+              <div className="resume-section">
+                <h2>Education</h2>
+                <hr className="resume-divider" />
+                <ul>
+                  {shareResume.education.map((edu, i) => (
+                    <li key={i}>
+                      <strong>{edu.degree}</strong>, {edu.school} <span className="resume-year">({edu.from} - {edu.till}{edu.cgpa ? `, CGPA: ${edu.cgpa}` : ''})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {shareResume.experience?.length > 0 && (
+              <div className="resume-section">
+                <h2>Experience</h2>
+                <hr className="resume-divider" />
+                <ul>
+                  {shareResume.experience.map((exp, i) => (
+                    <li key={i}><strong>{exp.role}</strong>, {exp.company} <span className="resume-year">({exp.duration})</span></li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {shareResume.projects?.length > 0 && (
+              <div className="resume-section">
+                <h2>Projects</h2>
+                <hr className="resume-divider" />
+                <ul>
+                  {shareResume.projects.map((proj, i) => (
+                    <li key={i}>
+                      <strong>{proj.title}</strong>: {proj.desc}
+                      {proj.preview && (
+                        proj.preview.match(/\.(jpeg|jpg|gif|png|svg)$/i)
+                          ? <img src={proj.preview} alt="preview" style={{maxWidth:'40px',maxHeight:'40px',marginLeft:'8px',verticalAlign:'middle',borderRadius:'4px'}} />
+                          : <a href={proj.preview} target="_blank" rel="noopener noreferrer" style={{marginLeft:'8px'}}>Preview</a>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {shareResume.skills?.length > 0 && (
+              <div className="resume-section">
+                <h2>Skills</h2>
+                <hr className="resume-divider" />
+                <ul className="resume-skills">
+                  {shareResume.skills.map((skill, i) => (
+                    <li key={i}>{skill}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {shareResume.languages?.length > 0 && (
+              <div className="resume-section">
+                <h2>Languages</h2>
+                <hr className="resume-divider" />
+                <ul className="resume-languages">
+                  {shareResume.languages.map((lang, i) => (
+                    <li key={i}>
+                      <span className="lang-label">{lang.name}</span>
+                      <div className="lang-bar-bg">
+                        <div className="lang-bar-fill" style={{width: `${lang.proficiency}%`}}></div>
+                      </div>
+                      <span className="lang-percent">{lang.proficiency}%</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {shareResume.customSections?.length > 0 && shareResume.customSections.map((section, idx) => (
+              <div className="resume-section" key={idx}>
+                <h2>{section.name}</h2>
+                <hr className="resume-divider" />
+                {section.entries.map((entry, entryIdx) => (
+                  <div key={entryIdx} style={{ marginBottom: '10px' }}>
+                    <strong>{entry.title}</strong>
+                    <div>{entry.description}</div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Share Modal */}
+      {showShareModal && (
+        <div className="resume-modal-overlay" onClick={() => setShowShareModal(false)}>
+          <div className="resume-modal-content">
+            <button className="resume-modal-close" onClick={() => setShowShareModal(false)}>&times;</button>
+            <h3>Shareable Resume Link</h3>
+            {shareLoading ? (
+              <div style={{margin:'18px 0',color:'#6366f1'}}>Generating link...</div>
+            ) : shareUrl.startsWith('http') ? (
+              <>
+                <a href={shareUrl} target="_blank" rel="noopener noreferrer">{shareUrl}</a>
+                <button style={{marginTop:'12px'}} onClick={() => {navigator.clipboard.writeText(shareUrl)}}>Copy Link</button>
+              </>
+            ) : (
+              <div style={{color:'#e11d48'}}>{shareUrl}</div>
+            )}
           </div>
         </div>
       )}
