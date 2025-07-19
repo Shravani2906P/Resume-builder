@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
 import Navbar from './Components/Navbar'
 import HomePage from './Components/HomePage';
 import Footer from './Components/Footer';
@@ -18,7 +18,7 @@ function App() {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path="/builder" element={<ResumeBuilder />} />
+        <Route path="/Resume-builder" element={<HomePage />} />
       </Routes>
       <Footer />
     </Router>
