@@ -7,6 +7,7 @@ import AuthPage from './Auth/AuthPage';
 import SignupPage from './Auth/SignupPage';
 import Dashboard from './Dashboard/Dashboard'; 
 import ResumeBuilder from './ResumeBuilder/ResumeBuilder';
+import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
         <Route path="/builder" element={<ResumeBuilder />} />
       </Routes>
       <Footer />
