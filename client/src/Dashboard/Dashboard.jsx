@@ -44,6 +44,16 @@ function Dashboard() {
     }
   };
 
+  // Delete a saved resume
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this resume?')) {
+      const prev = JSON.parse(localStorage.getItem('resumes') || '[]');
+      const updated = prev.filter(r => r.id !== id);
+      localStorage.setItem('resumes', JSON.stringify(updated));
+      setSavedResumes(updated);
+    }
+  };
+
   return (
     <div className="dashboard-container" style={{ paddingTop: '80px', minHeight: '100vh' }}>
       <header className="dashboard-header">
@@ -75,6 +85,7 @@ function Dashboard() {
               <button onClick={() => openResumeModal(resume)}>View</button>
               <button onClick={() => openResumeModal(resume)}>Download</button>
               <Link to={`/builder?id=${resume.id}`}><button>Edit</button></Link>
+              <button className="delete-btn" onClick={() => handleDelete(resume.id)}>Delete</button>
             </div>
           </div>
         ))}

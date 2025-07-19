@@ -56,6 +56,7 @@ function ResumeBuilder() {
         setSkills(found.skills || []);
         setSocials(found.socials || []);
         setCustomSections(found.customSections || []);
+        setResumeName(found.name || '');
       }
     }
   }, [editingId]);
