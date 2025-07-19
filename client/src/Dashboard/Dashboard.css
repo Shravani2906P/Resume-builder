@@ -1,0 +1,211 @@
+.dashboard-container {
+  padding: 32px 20px 20px 20px;
+  min-height: 100vh;
+  font-family: 'Josefin Sans', Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 36px;
+  border-bottom: 1.5px solid rgba(255,255,255,0.13);
+  padding-bottom: 18px;
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 1px;
+  font-family: 'VT323', monospace;
+  text-shadow: 1px 1px 6px rgba(102,126,234,0.18);
+}
+
+.create-btn {
+  background: #667eea;
+  color: #fff;
+  padding: 12px 28px;
+  border: none;
+  font-size: 1.08rem;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.create-btn:hover {
+  background: #4f46e5;
+  box-shadow: 0 4px 16px rgba(102,126,234,0.18);
+}
+
+.resume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 28px;
+}
+
+.resume-card {
+  background: rgba(255,255,255,0.90);
+  border: 1.5px solid #a5b4fc;
+  padding: 28px 20px 20px 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 24px rgba(102,126,234,0.10);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.resume-card:hover {
+  box-shadow: 0 12px 32px rgba(102,126,234,0.18);
+  transform: translateY(-4px) scale(1.02);
+}
+
+.resume-card h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #4f46e5;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.actions button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1.5px solid #a5b4fc;
+  border-radius: 6px;
+  background: #fff;
+  color: #4f46e5;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.actions button:hover {
+  background: #6366f1;
+  color: #fff;
+  border: 1.5px solid #6366f1;
+}
+
+.template-img {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.img-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-modal-content {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 24px 16px 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.img-modal-img {
+  max-width: 70vw;
+  max-height: 70vh;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(102,126,234,0.10);
+}
+.img-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #222;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+}
+.img-modal-close:hover {
+  color: #e11d48;
+}
+
+.resume-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.resume-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px 28px 24px 28px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  min-width: 340px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.resume-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #222;
+  cursor: pointer;
+  z-index: 10;
+  transition: color 0.2s;
+}
+.resume-modal-close:hover {
+  color: #e11d48;
+}
+
+@media (max-width: 700px) {
+  .dashboard-header {
+    flex-direction: column;
+    gap: 18px;
+    align-items: flex-start;
+    padding-bottom: 10px;
+  }
+  .resume-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .dashboard-container {
+    padding: 18px 4px 10px 4px;
+  }
+}

@@ -1,4 +1,6 @@
 import './AuthPage.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 function AuthPage() {
     return(
@@ -15,7 +17,7 @@ function AuthPage() {
                         <button type="submit">Log In</button>
 
                         <p className="signup-text">
-                            Don’t have an account? <a href="#">Sign up</a>
+                          Don’t have an account? <Link to="/signup">Sign up</Link>
                         </p>
                     </form>
             </div>

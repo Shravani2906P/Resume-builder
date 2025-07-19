@@ -1,11 +1,14 @@
 import './Footer.css';
+import { Link } from 'react-router-dom';
+
 
 function Footer() {
     return (
         <footer className="footer">
             <div className="footer-section footer-nav">
                 <a href="/" className="footer-link">Home</a>
-                <a href="/templates" className="footer-link">Templates</a>
+                <Link to="/dashboard" className="footer-link">Templates</Link>
+
                 <a href="/contact" className="footer-link">Contact</a>
             </div>
         

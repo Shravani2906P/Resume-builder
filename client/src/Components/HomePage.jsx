@@ -1,5 +1,6 @@
 import placeHolder from '../assets/placeholder.png';
 import './HomePage.css';
+import { Link } from 'react-router-dom';
 
 function HomePage() {
     return(
@@ -7,8 +8,8 @@ function HomePage() {
             <div className="content-section">
                 <p className="headline" >Create Your Resume & Portfolio in Minutes</p>
                 <div className="btns">
-                    <button>Start</button>
-                <button>Explore Templates</button>
+                    <Link to="/login"><button>Start</button></Link>
+                    <Link to="/dashboard"><button>Explore Templates</button></Link>
                 </div>
                 
             </div>

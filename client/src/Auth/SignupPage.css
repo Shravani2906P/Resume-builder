@@ -1,4 +1,4 @@
-.auth-container {
+.signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,7 +7,7 @@
   padding: 20px;
 }
 
-.auth-box {
+.signup-box {
   background: rgb(255, 255, 255);
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -19,7 +19,7 @@
   border: 1.5px solid rgba(255,255,255,0.18);
 }
 
-.auth-title {
+.signup-title {
   text-align: center;
   margin-bottom: 24px;
   font-size: 2rem;
@@ -29,12 +29,12 @@
   font-weight: 700;
 }
 
-.auth-form {
+.signup-form {
   display: flex;
   flex-direction: column;
 }
 
-.auth-form label {
+.signup-form label {
   margin-bottom: 6px;
   font-weight: 500;
   color: #000000c3;
@@ -42,7 +42,7 @@
   font-size: 1rem;
 }
 
-.auth-form input {
+.signup-form input {
   padding: 12px;
   margin-bottom: 18px;
   border: 1.5px solid #a5b4fc;
@@ -54,13 +54,13 @@
   transition: border 0.2s;
 }
 
-.auth-form input:focus {
+.signup-form input:focus {
   outline: none;
   border-color: #6366f1;
   background: rgba(255,255,255,0.28);
 }
 
-.auth-form button {
+.signup-form button {
   padding: 14px;
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   color: #fff;
@@ -75,12 +75,12 @@
   transition: background 0.2s, box-shadow 0.2s;
 }
 
-.auth-form button:hover {
+.signup-form button:hover {
   background: linear-gradient(90deg, #5a67d8 0%, #6d28d9 100%);
   box-shadow: 0 4px 16px rgba(102,126,234,0.18);
 }
 
-.signup-text {
+.login-text {
   text-align: center;
   margin-top: 16px;
   font-size: 1rem;
@@ -88,22 +88,22 @@
   font-family: 'Roboto Condensed', sans-serif;
 }
 
-.signup-text a {
+.login-text a {
   color: #a5b4fc;
   text-decoration: underline;
   font-weight: 600;
   transition: color 0.2s;
 }
 
-.signup-text a:hover {
+.login-text a:hover {
   color: #000000c3;
 }
 
 @media (max-width: 500px) {
-  .auth-box {
+  .signup-box {
     padding: 24px 8px 18px 8px;
   }
-  .auth-title {
+  .signup-title {
     font-size: 1.3rem;
   }
 }
