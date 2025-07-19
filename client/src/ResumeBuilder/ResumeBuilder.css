@@ -546,7 +546,7 @@
 .lang-label {
   min-width: 80px;
   font-weight: 600;
-  color: #4f46e5;
+  color: #100f1d;
 }
 .lang-bar-bg {
   background: #e0e7ff;
@@ -558,14 +558,14 @@
   margin-right: 8px;
 }
 .lang-bar-fill {
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: rgba(0, 0, 0, 0.525);
   height: 100%;
   border-radius: 8px;
   transition: width 0.3s;
 }
 .lang-percent {
   min-width: 36px;
-  color: #6366f1;
+  color: #1f1f2c;
   font-weight: 600;
   font-size: 0.98rem;
 }
