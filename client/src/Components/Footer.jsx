@@ -10,9 +10,15 @@ function Footer() {
     const handleContactChange = (e) => {
         setContactForm({ ...contactForm, [e.target.name]: e.target.value });
     };
-    const handleContactSubmit = (e) => {
+    const handleContactSubmit = async (e) => {
         e.preventDefault();
         setSubmitted(true);
+        // SheetDB expects { data: { ...fields } }
+        await fetch('https://sheetdb.io/api/v1/ogm8k968d56hq', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: contactForm }),
+        });
         setTimeout(() => setSubmitted(false), 2000);
         setContactForm({ name: '', email: '', message: '' });
         setShowContact(false);
