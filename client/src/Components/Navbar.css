@@ -56,7 +56,7 @@
     border-radius: 25px;
     color: white;
     cursor: pointer;
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: "VT323", monospace;
     font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.3s ease;
@@ -69,14 +69,6 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
-.buttons .get-started {
-    background: rgba(0, 0, 0, 0.5);
-    font-weight: 600;
-}
-
-.buttons .get-started:hover {
-    background: rgba(0, 0, 0, 0.7);
-}
 
 /* Responsive Design */
 @media (max-width: 768px) {

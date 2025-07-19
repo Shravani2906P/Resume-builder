@@ -522,6 +522,54 @@
   background: #e0e7ff;
 }
 
+.languages-section {
+  margin: 24px 0 12px 0;
+  padding: 18px 16px 10px 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1.5px solid #a5b4fc;
+}
+.resume-languages {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.resume-languages li {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1rem;
+}
+.lang-label {
+  min-width: 80px;
+  font-weight: 600;
+  color: #4f46e5;
+}
+.lang-bar-bg {
+  background: #e0e7ff;
+  border-radius: 8px;
+  width: 120px;
+  height: 12px;
+  position: relative;
+  overflow: hidden;
+  margin-right: 8px;
+}
+.lang-bar-fill {
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.3s;
+}
+.lang-percent {
+  min-width: 36px;
+  color: #6366f1;
+  font-weight: 600;
+  font-size: 0.98rem;
+}
+
 @media (max-width: 900px) {
   .builder-body {
     flex-direction: column;

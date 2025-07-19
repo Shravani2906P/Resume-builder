@@ -1,6 +1,9 @@
 import placeHolder from '../assets/placeholder.png';
 import './HomePage.css';
 import { Link } from 'react-router-dom';
+import first from '../assets/first.gif';
+import second from '../assets/second.gif';
+import third from '../assets/third.gif';
 
 function HomePage() {
     return(
@@ -15,7 +18,7 @@ function HomePage() {
             </div>
             <div className="featured-section">
                 <div className="section">
-                    <img className="image" src={placeHolder} alt="Placeholder" style={{ width: '200px' }}/>
+                    <img className="image" src={first} alt="Placeholder" style={{ width: '200px' }}/>
                     <div className="info">
                         <h3>Drag & Drop Resume Builder</h3>
                         <p>
@@ -42,11 +45,11 @@ function HomePage() {
                             <li>Suitable for designers, developers, marketers, and more</li>
                         </ul>
                     </div>
-                    <img className="image" src={placeHolder} alt="Placeholder" style={{ width: '200px' }}/>
+                    <img className="image" src={second} alt="Placeholder" style={{ width: '200px' }}/>
                 </div>
 
                 <div className="section">
-                    <img className="image" src={placeHolder} alt="Placeholder" style={{ width: '200px' }}/>
+                    <img className="image" src={third} alt="Placeholder" style={{ width: '200px' }}/>
                     <div className="info">
                         <h3>Download as PDF or Publish Online</h3>
                         <p>

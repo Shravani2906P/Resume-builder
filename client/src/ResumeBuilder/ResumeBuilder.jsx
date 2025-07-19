@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ResumeBuilder.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function ResumeBuilder() {
   // Main details state
@@ -39,11 +39,16 @@ function ResumeBuilder() {
   const [showSavePrompt, setShowSavePrompt] = useState(false);
   const [resumeName, setResumeName] = useState('');
 
+  // Languages state
+  const [languages, setLanguages] = useState([]);
+  const [langForm, setLangForm] = useState({ name: '', proficiency: 50 });
+
   const location = useLocation();
+  const navigate = useNavigate();
   const query = new URLSearchParams(location.search);
   const editingId = query.get('id');
 
-  // Load resume for editing if id is present
+  // Load resume for editing if id is present (add languages)
   React.useEffect(() => {
     if (editingId) {
       const resumes = JSON.parse(localStorage.getItem('resumes') || '[]');
@@ -57,6 +62,7 @@ function ResumeBuilder() {
         setSocials(found.socials || []);
         setCustomSections(found.customSections || []);
         setResumeName(found.name || '');
+        setLanguages(found.languages || []);
       }
     }
   }, [editingId]);
@@ -193,6 +199,20 @@ function ResumeBuilder() {
     }
   };
 
+  // Languages handlers
+  const handleLangChange = (e) => {
+    const { name, value } = e.target;
+    setLangForm({ ...langForm, [name]: name === 'proficiency' ? Number(value) : value });
+  };
+  const addLanguage = (e) => {
+    e.preventDefault();
+    if (langForm.name.trim()) {
+      setLanguages([...languages, { ...langForm }]);
+      setLangForm({ name: '', proficiency: 50 });
+    }
+  };
+  const deleteLanguage = (idx) => setLanguages(languages.filter((_, i) => i !== idx));
+
   // SVG icons
   const githubIcon = (
     <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" style={{verticalAlign: 'middle'}}><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.11.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
@@ -201,7 +221,7 @@ function ResumeBuilder() {
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{verticalAlign: 'middle'}}><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-10h3v10zm-1.5-11.268c-.966 0-1.75-.784-1.75-1.75s.784-1.75 1.75-1.75 1.75.784 1.75 1.75-.784 1.75-1.75 1.75zm15.5 11.268h-3v-5.604c0-1.337-.025-3.063-1.868-3.063-1.868 0-2.154 1.459-2.154 2.968v5.699h-3v-10h2.881v1.367h.041c.401-.761 1.379-1.563 2.838-1.563 3.036 0 3.6 2.001 3.6 4.599v5.597z"/></svg>
   );
 
-  // Save to Dashboard handler
+  // Save to Dashboard handler (add languages to saved data)
   const handleSave = () => {
     setShowSavePrompt(true);
   };
@@ -216,7 +236,8 @@ function ResumeBuilder() {
       projects,
       skills,
       socials,
-      customSections
+      customSections,
+      languages
     };
     let prev = JSON.parse(localStorage.getItem('resumes') || '[]');
     if (editingId) {
@@ -237,7 +258,7 @@ function ResumeBuilder() {
   return (
     <div className="resume-builder" style={{ paddingTop: '80px', minHeight: '100vh' }}>
       <header className="builder-header">
-        <button className="back-button">← Back</button>
+        <button className="back-button" onClick={() => navigate('/dashboard')}>← Back</button>
         <h2>Resume Builder</h2>
       </header>
 
@@ -329,28 +350,6 @@ function ResumeBuilder() {
             </>
           )}
 
-          {/* Add a Section Dropdown */}
-          <button type="button" onClick={() => toggleSection('custom')}>Add a Section ▼</button>
-          {openSection === 'custom' && (
-            <>
-              <form className="section-form" onSubmit={addCustomSection}>
-                <input name="title" type="text" placeholder="Section Title" value={customForm.title} onChange={handleCustomChange} />
-                <textarea name="description" placeholder="Section Description" value={customForm.description} onChange={handleCustomChange} rows={3} style={{resize:'vertical'}} />
-                <button type="submit">Add</button>
-              </form>
-              {customSections.length > 0 && (
-                <ul className="form-list">
-                  {customSections.map((sec, i) => (
-                    <li key={i}>
-                      <span><strong>{sec.title}:</strong> {sec.description}</span>
-                      <button type="button" className="delete-btn" onClick={() => deleteCustomSection(i)} title="Delete">🗑️</button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </>
-          )}
-
           {/* Skills Dropdown */}
           <button type="button" onClick={() => toggleSection('skills')}>Skills ▼</button>
           {openSection === 'skills' && (
@@ -410,6 +409,42 @@ function ResumeBuilder() {
               )}
             </>
           )}
+
+          {/* Languages Section */}
+          <div className="languages-section">
+            <h3>Languages</h3>
+            <form className="section-form" onSubmit={addLanguage} style={{marginBottom: '8px'}}>
+              <input
+                name="name"
+                type="text"
+                placeholder="Language"
+                value={langForm.name}
+                onChange={handleLangChange}
+                style={{maxWidth: '180px'}}
+              />
+              <input
+                name="proficiency"
+                type="range"
+                min="0"
+                max="100"
+                value={langForm.proficiency}
+                onChange={handleLangChange}
+                style={{margin: '0 10px', width: '120px'}}
+              />
+              <span style={{minWidth: '36px', display: 'inline-block'}}>{langForm.proficiency}%</span>
+              <button type="submit">Add</button>
+            </form>
+            {languages.length > 0 && (
+              <ul className="form-list">
+                {languages.map((lang, i) => (
+                  <li key={i}>
+                    <span>{lang.name} <span style={{color:'#6366f1',marginLeft:'8px'}}>{lang.proficiency}%</span></span>
+                    <button type="button" className="delete-btn" onClick={() => deleteLanguage(i)} title="Delete">🗑️</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
 
           {/* +Add Custom Section Button */}
           <div style={{ marginTop: '24px', marginBottom: '8px' }}>
@@ -562,6 +597,24 @@ function ResumeBuilder() {
                   </ul>
                 </div>
               )}
+              {/* Languages in Preview */}
+              {languages.length > 0 && (
+                <div className="resume-section">
+                  <h2>Languages</h2>
+                  <hr className="resume-divider" />
+                  <ul className="resume-languages">
+                    {languages.map((lang, i) => (
+                      <li key={i}>
+                        <span className="lang-label">{lang.name}</span>
+                        <div className="lang-bar-bg">
+                          <div className="lang-bar-fill" style={{width: `${lang.proficiency}%`}}></div>
+                        </div>
+                        <span className="lang-percent">{lang.proficiency}%</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             <div className="preview-actions">
               <button>Download PDF</button>
@@ -576,7 +629,7 @@ function ResumeBuilder() {
                   type="text"
                   value={resumeName}
                   onChange={e => setResumeName(e.target.value)}
-                  placeholder="e.g. Shravani's Resume"
+                  placeholder="e.g. John's Resume"
                   className="save-modal-input"
                 />
                 <div className="save-modal-actions">
