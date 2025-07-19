@@ -28,24 +28,20 @@ function Dashboard() {
     if (e.target.className === 'resume-modal-overlay' || e.target.className === 'resume-modal-close') setViewResume(null);
   };
 
-  // Download PDF for saved resume
-  const handleDownload = async (resume) => {
-    setViewResume(resume); // Open modal to render preview
-    setTimeout(async () => {
-      if (previewRef.current) {
-        const canvas = await html2canvas(previewRef.current, { scale: 2 });
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF('p', 'mm', 'a4');
-        const pageWidth = pdf.internal.pageSize.getWidth();
-        const pageHeight = pdf.internal.pageSize.getHeight();
-        const imgProps = pdf.getImageProperties(imgData);
-        const pdfWidth = pageWidth;
-        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight > pageHeight ? pageHeight : pdfHeight);
-        pdf.save(`${resume.name || 'resume'}.pdf`);
-        setViewResume(null);
-      }
-    }, 200); // Wait for modal to render
+  // Download PDF for saved resume (now triggered from inside modal)
+  const downloadPDF = async () => {
+    if (previewRef.current && viewResume) {
+      const canvas = await html2canvas(previewRef.current, { scale: 2 });
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pageWidth;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight > pageHeight ? pageHeight : pdfHeight);
+      pdf.save(`${viewResume.name || 'resume'}.pdf`);
+    }
   };
 
   return (
@@ -77,7 +73,7 @@ function Dashboard() {
             <h3>{resume.name}</h3>
             <div className="actions">
               <button onClick={() => openResumeModal(resume)}>View</button>
-              <button onClick={() => handleDownload(resume)}>Download</button>
+              <button onClick={() => openResumeModal(resume)}>Download</button>
               <Link to={`/builder?id=${resume.id}`}><button>Edit</button></Link>
             </div>
           </div>
@@ -187,6 +183,7 @@ function Dashboard() {
                 </div>
               ))}
             </div>
+            <button className="download-pdf-btn" onClick={downloadPDF} style={{marginTop: '18px'}}>Download PDF</button>
           </div>
         </div>
       )}
