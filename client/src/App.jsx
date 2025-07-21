@@ -18,7 +18,8 @@ function App() {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        <Route path="/Resume-builder" element={<HomePage />} />
+        <Route path="/builder" element={<PrivateRoute><ResumeBuilder /></PrivateRoute>} />
+        <Route path="/Resume-builder" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer />
     </Router>
